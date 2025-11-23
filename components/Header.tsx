@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import ThemeSwitcher from "@/Hooks/useDarkMode";
 
 const Header: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -78,7 +77,7 @@ const Header: React.FC = () => {
           </nav>
         </div>
       )}
-      <ThemeSwitcher />
+     
     </header>
   );
 };

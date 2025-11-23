@@ -25,7 +25,7 @@ const ThemeSwitcher = () => {
       {/* Main button */}
       <button
         onClick={() => setOpen(!open)}
-        className="p-3 rounded-full   transition flex items-center justify-center cursor-pointer shadow-md "
+        className="p-3 rounded-full   transition flex items-center justify-center cursor-pointer shadow-md"
       >
         {current === "dark" ? <RiMoonLine size={20} /> : <RiSunLine size={20} />}
       </button>
