@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "mazhar",
+  "license": "ISC",
+  "description": " The AI-Powered HR Recruitment System automates resume screening, candidate ranking, and job matching using advanced NLP and smart algorithms. It provides real-time insights through interactive dashboards and enhances communication with automated updates. Overall, it helps organizations hire faster, smarter, and more efficiently. ",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MAZHARFA/hr-recruitment-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MAZHARFA/hr-recruitment-system/issues"
+  },
+  "homepage": "https://github.com/MAZHARFA/hr-recruitment-system#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14"
+  }
+}

@@ -1,0 +1,18 @@
+
+import nodemailer from "nodemailer";
+
+export const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.GOOGLE_PASS,
+  },
+});
+
+export const sender = {
+  Email: "hrrecruitmentsystem@gmail.com",
+  name: "AI-Powered HR Recruitment System",
+};
+
