@@ -55,10 +55,10 @@ export default function verifyEmail  ()  {
     try {
       await verifyEmail(verificationCode);
       toast.success("Email verified ");
-      if (role === "recruiter") {
-        router.push("/recruiter/dashboard");
-      } else {
+      if (role === "Recruiter") {
         router.push("/jobseeker/dashboard");
+      } else {
+        router.push("/recruiter/dashboard");
       }
     } catch (err) {
       console.error(err);

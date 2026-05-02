@@ -1,6 +1,8 @@
 // src/lib/nlp/resumeAnalyzer.ts
 // Pure TypeScript NLP resume analysis engine — no external ML deps needed
 
+import { Key } from "react";
+
 // ─── Skill Taxonomy ───────────────────────────────────────────────────────────
 const SKILL_TAXONOMY: Record<string, string[]> = {
   // Frontend
@@ -127,6 +129,7 @@ const SECTIONS: Record<string, RegExp> = {
 
 // ─── Main Analyzer ────────────────────────────────────────────────────────────
 export interface ResumeAnalysis {
+  recommendations: any;
   overallScore: number;                        // 0–100
   grade: "A+" | "A" | "B+" | "B" | "C+" | "C" | "D" | "F";
   scores: {
@@ -138,7 +141,9 @@ export interface ResumeAnalysis {
     keywords: number;
   };
   detectedSkills: { name: string; category: string }[];
-  skillCategories: { category: string; skills: string[]; count: number }[];
+  skillCategories: {
+    name: Key | null | undefined; category: string; skills: string[]; count: number 
+}[];
   yearsExperience: number | null;
   seniorityLevel: string;
   educationLevel: string;

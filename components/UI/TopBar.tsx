@@ -3,15 +3,19 @@ import React, { useEffect } from "react";
 import { useUser } from "@/context/userContext";
 import { LuChevronDown, LuBell } from "react-icons/lu"; // Added LuBell
 import Link from "next/link"; // For navigation
-
+import { useRouter } from "next/navigation";
 export default function TopBar() {
   const { user, userProfile, isCheckingAuth } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
-      userProfile();
+    if(!user){
+      router.push("/yz/login")
     }
-  }, [userProfile, user]);
+    // if (!user) {
+    //   userProfile();
+    // }
+  }, [userProfile, user,router]);
 
   if (isCheckingAuth && !user) {
     return <div className="h-16 border-b border-gray-200 dark:border-gray-800 animate-pulse bg-gray-50 dark:bg-gray-900 w-full" />;

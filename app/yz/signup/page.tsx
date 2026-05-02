@@ -23,16 +23,16 @@ import toast from "react-hot-toast";
 
 const roles = [
   {
-    key: "Job Seeker",
-    title: "Job Seeker",
-    desc: "Find your dream job",
-    icon: UserCircle,
-  },
-  {
     key: "Recruiter",
     title: "Recruiter",
     desc: "Hire smarter & faster",
     icon: Briefcase,
+  },
+  {
+    key: "Job Seeker",
+    title: "Job Seeker",
+    desc: "Find your dream job",
+    icon: UserCircle,
   },
 ] as const;
 
@@ -49,7 +49,9 @@ export default function SignUp() {
   const [company, setCompany] = useState("");
   const [title, setTitle] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [profilePicPreview, setProfilePicPreview] = useState<string | null>(null);
+  const [profilePicPreview, setProfilePicPreview] = useState<string | null>(
+    null
+  );
   const [profilePicFile, setProfilePicFile] = useState<File | null>(null);
 
   const validateForm = () => {
@@ -94,17 +96,10 @@ export default function SignUp() {
 
       // 2. Execute Signup
       await signup(email, password, Name, imageUrl, role);
-      
+
       toast.success("Account created!");
 
-      // 3. Logic-Based Routing
-      // We route to verifyEmail first. 
-      // We can pass the role in the URL so the verification page knows where to send them next.
-      const targetDashboard = role === "Recruiter" ? "recruiter" : "jobseeker";
-      
-      // Use absolute path starting with / to avoid relative pathing issues
       router.push(`./verifyEmail`);
-
     } catch (err: any) {
       toast.error(err?.message || "Registration failed");
       console.error("Signup Error:", err);
@@ -239,13 +234,20 @@ export default function SignUp() {
               disabled={isLoading}
               className="w-full py-4 rounded-xl font-bold bg-linear-to-r from-green-500 to-emerald-500 hover:opacity-90 transition flex justify-center items-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? <Loader className="animate-spin" /> : "Create Account"}
+              {isLoading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                "Create Account"
+              )}
             </button>
           </form>
 
           <p className="text-center text-sm text-slate-400 mt-6">
             Already have an account?{" "}
-            <Link href="/login" className="text-green-400 font-semibold hover:underline">
+            <Link
+              href="/login"
+              className="text-green-400 font-semibold hover:underline"
+            >
               Login
             </Link>
           </p>
