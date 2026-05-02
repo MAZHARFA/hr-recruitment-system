@@ -1,23 +1,29 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { LuTrendingUp, LuBriefcase, LuBookmark, } from "react-icons/lu";
+import { LuTrendingUp, LuBriefcase, LuBookmark } from "react-icons/lu";
 import { LucideCheckCircle } from "lucide-react";
 import Link from "next/link";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
+import { useUser } from "@/context/userContext";
+import { useRouter } from "next/navigation";
 
 export default function JobSeekerDashboard() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-
+  const { user } = useUser();
+  const router = useRouter();
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
+        // if (!user) {
+        //   router.push("/yz/login");
+        // }
         // Fetching Job Seeker specific applications
-        const response = await fetch("/api/jobseeker/jobs"); 
+        const response = await fetch("/api/jobseeker/jobs");
         const applications = await response.json();
-        
+
         setData({
           stats: {
             appliedJobs: applications.length || 0,
@@ -25,7 +31,7 @@ export default function JobSeekerDashboard() {
             savedJobs: 0,
             matchRate: "",
           },
-          recentApplications: applications.slice(0, 5) // Last 5 applications
+          recentApplications: applications.slice(0, 5), // Last 5 applications
         });
       } catch (error) {
         console.error("JobSeeker Dashboard fetch error:", error);
@@ -35,7 +41,7 @@ export default function JobSeekerDashboard() {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [router]);
 
   const stats = [
     {
@@ -44,7 +50,7 @@ export default function JobSeekerDashboard() {
       icon: <LuBriefcase />,
       color: "text-blue-600 cursor-pointer",
       bg: "bg-blue-100",
-      path: "./jobs", 
+      path: "./jobs",
     },
     {
       label: "Interviews",
@@ -52,7 +58,7 @@ export default function JobSeekerDashboard() {
       icon: <LucideCheckCircle />,
       color: "text-purple-600",
       bg: "bg-purple-100",
-      path: "./interviews", 
+      path: "./interviews",
     },
     {
       label: "Saved Jobs",
@@ -81,17 +87,17 @@ export default function JobSeekerDashboard() {
       {/* Stats Grid - Identical to Recruiter UI */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, i) => (
-          <Link 
-            key={i} 
-            href={stat.path || "#"} 
-            className="block group"
-          >
+          <Link key={i} href={stat.path || "#"} className="block group">
             <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm transition-all hover:shadow-md hover:border-blue-400 dark:hover:border-blue-900 cursor-pointer">
-              <div className={`w-12 h-12 ${stat.bg} ${stat.color} rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform`}>
+              <div
+                className={`w-12 h-12 ${stat.bg} ${stat.color} rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform`}
+              >
                 {stat.icon}
               </div>
               <p className="text-gray-500 text-sm font-medium">{stat.label}</p>
-              <h3 className="text-2xl font-bold mt-1 dark:text-white">{stat.value}</h3>
+              <h3 className="text-2xl font-bold mt-1 dark:text-white">
+                {stat.value}
+              </h3>
             </div>
           </Link>
         ))}
@@ -100,8 +106,15 @@ export default function JobSeekerDashboard() {
       {/* Recent Applications Table - Identical to Recruiter UI */}
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm cursor-pointer">
         <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
-          <h2 className="text-lg font-bold dark:text-white">My Recent Applications</h2>
-          <Link href="./applications" className="text-sm text-blue-500 hover:underline">View All</Link>
+          <h2 className="text-lg font-bold dark:text-white">
+            My Recent Applications
+          </h2>
+          <Link
+            href="./jobs"
+            className="text-sm text-blue-500 hover:underline"
+          >
+            View All
+          </Link>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
@@ -146,8 +159,14 @@ export default function JobSeekerDashboard() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="px-6 py-10 text-center text-gray-500">
-                    No applications found. <Link href="/jobs" className="text-blue-500">Find jobs</Link>
+                  <td
+                    colSpan={4}
+                    className="px-6 py-10 text-center text-gray-500"
+                  >
+                    No applications found.{" "}
+                    <Link href="./jobs" className="text-blue-500">
+                      Find jobs
+                    </Link>
                   </td>
                 </tr>
               )}

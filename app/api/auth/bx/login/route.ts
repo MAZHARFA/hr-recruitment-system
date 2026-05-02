@@ -38,11 +38,14 @@ export async function POST(req: Request) {
     user.signIn = new Date();
     await user.save();
 
-    await generateTokenAndSetCookie(user._id.toString());
+    await generateTokenAndSetCookie(user._id.toString(), "role");
 
     return NextResponse.json(
       {
         success: true,
+        user: {
+          role: user.role,
+        },
       },
       { status: 200 }
     );

@@ -6,16 +6,14 @@ import toast from "react-hot-toast";
 /* ---------------- API URL ---------------- */
 
 export const AUTH_URL =
-  process.env.MODE === "development"
-    ? "/api/auth/bx/"
-    : "/api/auth/bx/";
+  process.env.MODE === "development" ? "/api/auth/bx/" : "/api/auth/bx/";
 
 axios.defaults.withCredentials = true;
 
 /* ---------------- Types ---------------- */
 
 interface User {
-  role: string;
+  role: "Recruiter" | "Job seeker";
   _id?: string;
   Name: string;
   email: string;
@@ -127,6 +125,7 @@ export const useAuthStore = create<AuthState>(
           error: null,
           isLoading: false,
         });
+        return response.data.user;
       } catch (err) {
         const error = err as AxiosError<any>;
 
@@ -254,13 +253,17 @@ export const useAuthStore = create<AuthState>(
     uploadImage: async (imageFile) => {
       const formData = new FormData();
       formData.append("image", imageFile);
-  
+
       try {
-        const response = await axios.post(`${AUTH_URL}/upload-image`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const response = await axios.post(
+          `${AUTH_URL}/upload-image`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
         return response.data;
       } catch (error) {
         console.error("Error uploading image", error);

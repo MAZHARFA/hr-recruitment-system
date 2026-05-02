@@ -138,7 +138,7 @@ export default function ResumeAnalyzerPage() {
       reader.readAsText(file);
     } else {
       setError(
-        "Please upload a .txt or .md file. For PDF/DOCX, paste the text directly."
+        "Please upload a .pdd or .docx file."
       );
     }
     if (fileRef.current) fileRef.current.value = "";
@@ -211,7 +211,7 @@ export default function ResumeAnalyzerPage() {
       actions={
         <div className="flex gap-2">
           {analysis && (
-            <button onClick={reset} className="btn-secondary btn-sm">
+            <button onClick={reset} className="btn-secondary btn-sm cursor-pointer">
               ← New Analysis
             </button>
           )}
@@ -234,7 +234,7 @@ export default function ResumeAnalyzerPage() {
                 {
                   n: "1",
                   t: "Paste Resume",
-                  d: "Paste resume text or upload .txt file",
+                  d: "Paste resume text or upload .pdf file",
                 },
                 {
                   n: "2",
@@ -267,7 +267,7 @@ export default function ResumeAnalyzerPage() {
 
           {history.length > 0 && (
             <div className="card p-4">
-              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
+              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 cursor-pointer">
                 Recent Analyses
               </h3>
               <div className="space-y-2">
@@ -330,9 +330,9 @@ export default function ResumeAnalyzerPage() {
         </div>
 
         {/* Main area */}
-        <div className="col-span-3">
+        <div className="col-span-3 cursor-pointer">
           {/* Tabs */}
-          <div className="flex gap-1 mb-5 bg-gray-100 p-1 rounded-xl w-fit">
+          <div className="flex gap-1 mb-5 bg-gray-100 p-1 rounded-xl w-fit ">
             {(["input", "results"] as const).map((t) => (
               <button
                 key={t}
@@ -340,7 +340,7 @@ export default function ResumeAnalyzerPage() {
                   t === "results" && !analysis ? null : setActiveTab(t)
                 }
                 className={cn(
-                  "px-4 py-2 rounded-lg text-sm font-semibold transition-all",
+                  "px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer",
                   activeTab === t
                     ? "bg-white text-gray-900 shadow-sm"
                     : "text-gray-500 hover:text-gray-700",
@@ -389,15 +389,7 @@ export default function ResumeAnalyzerPage() {
               )}
 
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="label">Candidate Name (optional)</label>
-                  <input
-                    className="input"
-                    value={candidateName}
-                    onChange={(e) => setCandidateName(e.target.value)}
-                    placeholder="...."
-                  />
-                </div>
+              
                 <div className="flex items-end">
                   <div className="w-full">
                     <label className="label">Upload Resume File</label>
@@ -417,10 +409,10 @@ export default function ResumeAnalyzerPage() {
              font-medium rounded-lg text-sm
              hover:bg-gray-50 hover:border-gray-400
              focus:ring-4 focus:outline-none focus:ring-blue-100
-             transition-all duration-200 shadow-sm w-full"
+             transition-all duration-200 shadow-sm w-full cursor-pointer"
                       >
                         <svg
-                          className="w-5 h-5 text-gray-500"
+                          className="w-5 h-5 text-gray-500 "
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -430,7 +422,7 @@ export default function ResumeAnalyzerPage() {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12 "
                           />
                         </svg>
                         <span>Upload .pdf / docx</span>
@@ -440,57 +432,61 @@ export default function ResumeAnalyzerPage() {
                 </div>
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="label mb-0">Resume Text *</label>
-                  <div className="flex gap-2">
-                    <span className="text-xs text-gray-400">
-                      {resumeText.trim().split(/\s+/).filter(Boolean).length}{" "}
-                      words
-                    </span>
-                  </div>
-                </div>
-                <textarea
-                  rows={14}
-                  className="input resize-none font-mono text-xs leading-relaxed"
-                  value={resumeText}
-                  onChange={(e) => setResumeText(e.target.value)}
-                  placeholder={`Paste the full resume text here...\n\nTip: Copy all text from the resume PDF and paste it here.\nThe NLP engine will extract skills, experience, achievements and more.`}
-                />
-              </div>
+            
 
               <button
                 onClick={analyze}
                 disabled={loading || !resumeText.trim()}
-                className="btn-primary w-full justify-center py-3 text-base"
+                className={cn(
+                  // Base Styles
+                  "relative group  flex items-center justify-center gap-3 py-4 px-6 rounded-2xl font-bold text-lg transition-all duration-300 overflow-hidden",
+                  // Light Mode: Indigo/Violet Gradient
+                  "bg-linear-to-r from-indigo-600 to-violet-600 text-white shadow-xl shadow-indigo-200",
+                  // Dark Mode: Higher contrast and neon glow
+                  "dark:from-indigo-500 dark:to-purple-600 dark:shadow-indigo-900/20 dark:hover:shadow-indigo-500/40",
+                  // Interaction
+                  "hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed disabled:scale-100 cursor-pointer",
+                  loading && "cursor-wait"
+                )}
               >
+                {/* Shimmer Effect overlay */}
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
+
                 {loading ? (
-                  <span className="flex items-center gap-2">
-                    <svg
-                      className="w-5 h-5 animate-spin"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                      />
-                    </svg>
-                    Analyzing with NLP Engine…
+                  <span className="flex items-center gap-3">
+                    {/* Custom AI Loader */}
+                    <div className="relative flex items-center justify-center ">
+                      <div className="w-6 h-6 border-2 border-white/30 rounded-full animate-spin border-t-white" />
+                      <div className="absolute w-2 h-2 bg-white rounded-full animate-pulse" />
+                    </div>
+                    <span className="tracking-tight italic opacity-90">
+                      Processing NLP Layers...
+                    </span>
                   </span>
                 ) : (
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-3">
+                    {/* Animated Icon */}
+                    <div className="p-1.5 bg-white/10 rounded-lg group-hover:bg-white/20 transition-colors ">
+                      <svg
+                        className="w-5 h-5 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                        />
+                      </svg>
+                    </div>
+                    <span className="tracking-tight">Run Deep AI Analysis</span>
+
+                    {/* Right Arrow - appears on hover */}
                     <svg
-                      className="w-5 h-5"
+                      className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 cursor-pointer"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -499,10 +495,9 @@ export default function ResumeAnalyzerPage() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z "
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
                       />
                     </svg>
-                    Analyze Resume with AI
                   </span>
                 )}
               </button>

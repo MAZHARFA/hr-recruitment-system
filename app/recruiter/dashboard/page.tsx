@@ -1,20 +1,27 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { LuTrendingUp, LuBriefcase, LuUsers, LuClock } from "react-icons/lu";
-import Link from "next/link"; // Added this
+import Link from "next/link";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
+import { useUser } from "@/context/userContext";
+import { useRouter } from "next/navigation";
 
 export default  function DashboardOverview() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        setLoading(true);
-        // Fixed: Removed the extra slash from the path
+        // if (!loading && !user) {
+        //   router.push("/yz/login");
+        // }
+        
         const response = await fetch("/api/recruiter/jobs");
         const jobs = await response.json();
+        // setLoading(true);
 
         setData({
           stats: {
@@ -42,7 +49,7 @@ export default  function DashboardOverview() {
       icon: <LuBriefcase />,
       color: "text-blue-600 cursor-pointer",
       bg: "bg-blue-100",
-      path: "./jobs", // Update paths based on your actual routes
+      path: "./jobs",
     },
     {
       label: "New Candidates",
@@ -75,7 +82,6 @@ export default  function DashboardOverview() {
 
   return (
     <div className="space-y-8 p-4 sm:p-0">
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, i) => (
           <Link key={i} href={stat.path || "#"} className="block group">
@@ -94,7 +100,6 @@ export default  function DashboardOverview() {
         ))}
       </div>
 
-      {/* Recent Activity Table */}
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm cursor-pointer">
         <div className="p-6 border-b border-gray-100 dark:border-gray-800">
           <h2 className="text-lg font-bold dark:text-white">

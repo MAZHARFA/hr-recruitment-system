@@ -13,7 +13,7 @@ export default function verifyEmail  ()  {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  const role = searchParams.get("role");
+  const role = searchParams.get("user_role");
   // Assuming your store is typed. If not, you may need to define an interface for it.
   const { error, isLoading, verifyEmail } = useAuthStore() as any;
 

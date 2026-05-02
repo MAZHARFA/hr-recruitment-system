@@ -1,5 +1,5 @@
 "use client";
-import {  useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Loader, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
@@ -9,17 +9,16 @@ import { useAuthStore } from "@/Authstore/store";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-
-export default function login()  {
+export default function login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const { login, isLoading, error } = useAuthStore();
- 
-const router =useRouter();
 
-  const handleLogin = async (e: { preventDefault: () => void; }) => {
+  const router = useRouter();
+
+  const handleLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     // validation
@@ -41,14 +40,27 @@ const router =useRouter();
     }
 
     try {
-      const user = await login(email, password);
-      toast.success("Login successful!");
-     
-      router.push("/recruiter/dashboard");
+      // Use 'as any' if your store types aren't updated yet to stop the 'void' error
+      const user = (await login(email, password)) as any;
+
+      // Now this 'truthiness' test is allowed
+      if (user && user.role) {
+        toast.success("Login successful!");
+
+        // Exact match for your role keys (Job Seeker has a space)
+        if (user.role === "Recruiter") {
+          router.push("/recruiter/dashboard");
+        } else if (user.role === "Job Seeker") {
+          router.push("/jobseeker/dashboard");
+        } else {
+          router.push("/"); // General fallback
+        }
+      }
+
       setEmail("");
       setPassword("");
     } catch (error) {
-     
+      console.error("Login redirect error:", error);
     }
   };
 
@@ -139,4 +151,4 @@ const router =useRouter();
       </motion.div>
     </div>
   );
-};
+}

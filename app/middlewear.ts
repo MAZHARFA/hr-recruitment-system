@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyToken } from"@/Utils/verifytoken";
+import { verifyToken } from "@/Utils/verifytoken";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const { pathname } = req.nextUrl;
 
   const isPublic = pathname.startsWith("/auth") || pathname === "/";
-  const isRecruiter = pathname.startsWith("/recruiter");
-  const isJobSeeker = pathname.startsWith("/jobseeker");
+  const isRecruiter = pathname.startsWith("/Recruiter");
+  const isJobSeeker = pathname.startsWith("/Job seeker");
 
   if (!token) {
     if (isPublic) return NextResponse.next();
@@ -22,17 +22,19 @@ export function middleware(req: NextRequest) {
   }
 
   // Wrong-role guard
-  if (isRecruiter && user.role !== "RECRUITER") {
-    return NextResponse.redirect(new URL("/jobseeker/dashboard", req.url));
-  }
-  if (isJobSeeker && user.role !== "JOB_SEEKER") {
-    return NextResponse.redirect(new URL("/recruiter/dashboard", req.url));
-  }
+  // if (isRecruiter && user.role !== "RECRUITER") {
+  //   return NextResponse.redirect(new URL("/recruiter/dashboard", req.url));
+  // }
+  // if (isJobSeeker && user.role !== "JOB_SEEKER") {
+  //   return NextResponse.redirect(new URL("/jobseeker/dashboard", req.url));
+  // }
 
   // Redirect root auth to correct dashboard
   if (pathname === "/" || pathname === "/auth/bx/login") {
-    if (user.role === "RECRUITER") return NextResponse.redirect(new URL("/recruiter/dashboard", req.url));
-    if (user.role === "JOB_SEEKER") return NextResponse.redirect(new URL("/jobseeker/dashboard", req.url));
+    if (user.role === "RECRUITER")
+      return NextResponse.redirect(new URL("/recruiter/dashboard", req.url));
+    if (user.role === "JOB_SEEKER")
+      return NextResponse.redirect(new URL("/jobseeker/dashboard", req.url));
   }
 
   return NextResponse.next();
