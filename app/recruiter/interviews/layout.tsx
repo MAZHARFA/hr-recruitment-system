@@ -8,8 +8,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    // h-screen locks the height to the viewport
-    // overflow-hidden prevents the body from scrolling
+   
     <div className="flex h-screen w-full bg-gray-50 dark:bg-black overflow-hidden">
       
       {/* 1. Sidebar: Fixed width, won't shrink */}

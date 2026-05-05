@@ -145,3 +145,92 @@ export type ApplicationStatus =
   | "HR_INTERVIEW"
   | "FINAL_INTERVIEW"
   | "PANEL";
+
+
+
+
+
+
+
+
+
+  // ─── Shared Data Types ────────────────────────────────────────────────────────
+
+export interface Candidate {
+  initials: string;
+  name: string;
+  role: string;
+  score: number;
+  color: string;
+}
+
+export interface PipelineStage {
+  label: string;
+  count: number;
+  color: string;
+  heightPercent: number;
+}
+
+export interface StatCard {
+  label: string;
+  value: string;
+  change: string;
+  positive: boolean;
+}
+
+export interface Feature {
+  id: string;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  accentClass: string;
+  iconBgClass: string;
+}
+
+export interface Step {
+  number: string;
+  title: string;
+  description: string;
+}
+
+export interface Metric {
+  prefix: string;
+  value: string;
+  suffix: string;
+  label: string;
+  color: string;
+}
+
+export interface Testimonial {
+  quote: string;
+  author: string;
+  role: string;
+  company: string;
+  initials: string;
+  avatarColor: string;
+}
+
+export interface PricingPlan {
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  features: string[];
+  featured?: boolean;
+  cta: string;
+}
+
+// ─── Component Prop Interfaces ────────────────────────────────────────────────
+
+export interface HeroProps {
+  onGetStarted: () => void;
+}
+
+export interface CTAProps {
+  onGetStarted: () => void;
+}
+
+export interface HowItWorksProps {
+  activeStep: number;
+  onStepChange: (index: number) => void;
+}

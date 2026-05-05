@@ -79,23 +79,16 @@ An intelligent, full-stack recruitment platform designed to automate the screeni
 
    ```bash
    git clone https://github.com/your-username/ai-hr-system.git
-   cd ai-hr-system
+   cd hr-recruitment-ssytem
+   ```
 
-    Install dependencies
-
+2.**Install dependencies**
 
     npm install
 
-    Environment Variables
-    Create a .env.local file in the root directory:
-    Code snippet
-
-    MONGODB_URI=your_mongodb_connection_string
-    JWT_SECRET=your_super_secret_key
-    NODE_ENV=development
-
-
-
     npm run dev
-   ```
+
+```
+
+```
 ````

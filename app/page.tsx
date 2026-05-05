@@ -1,19 +1,23 @@
 "use client";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 
-    
+import { Features } from "@/components/Features";
+import { Hero } from "@/components/Hero";
+import { LogoBar } from "@/components/LogoBar";
+import { Navbar } from "@/components/Navbar";
+import { useCallback } from "react";
 
 export default function Home() {
-  return (
-    <>
-      <Header
-        onEnterApp={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-      />
-      <Footer />
-     
-    </>
-  );
+
+  const handleGetStarted = useCallback((): void => {
+    // Replace with your sign-up flow / router.push("/signup")
+    window.location.href = "/yz/signup";
+  }, []);
+  return <>
+  
+  
+<Navbar/>
+{/* <Hero         onGetStarted={handleGetStarted} /> */}
+{/* <LogoBar /> */}
+<Features />
+  </>;
 }
