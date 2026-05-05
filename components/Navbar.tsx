@@ -2,9 +2,12 @@
 
 import { ZapIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function Navbar(): React.JSX.Element {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = (): void => setIsScrolled(window.scrollY > 20);
@@ -38,8 +41,8 @@ export function Navbar(): React.JSX.Element {
           {(
             [
               { href: "#features", label: "Features" },
-              { href: "#how",      label: "Process"  },
-              { href: "#pricing",  label: "Pricing"  },
+              { href: "#how", label: "Process" },
+              { href: "#testimonials", label: "Testimonila" },
             ] as const
           ).map(({ href, label }) => (
             <a
@@ -55,9 +58,10 @@ export function Navbar(): React.JSX.Element {
         {/* CTA */}
         <button
           type="button"
+          onClick={() => router.push("/yz/login")}
           className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold
                      hover:bg-indigo-500 hover:text-white transition-all duration-200
-                     active:scale-95"
+                     active:scale-95 cursor-pointer"
         >
           Get Started
         </button>

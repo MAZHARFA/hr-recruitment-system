@@ -74,9 +74,9 @@ export default function SideBar() {
         }`}
       >
         <div className="text-2xl font-black text-blue-600 tracking-tighter flex items-center gap-2">
-          <span className="shrink-0">H.</span>
+          <span className="shrink-0">HR</span>
           {!isCollapsed && (
-            <span className="animate-in fade-in duration-500">IRE.AI</span>
+            <span className="animate-in fade-in duration-500">_RECRUITER</span>
           )}
         </div>
       </div>
@@ -123,7 +123,7 @@ export default function SideBar() {
       <div className="p-4 border-t border-gray-100 dark:border-gray-800 space-y-1">
         {/* Settings Link */}
         <Link
-          href="/setting"
+          href="./setting"
           className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group overflow-hidden ${
             pathname === "/setting"
               ? "bg-gray-100 dark:bg-gray-900 text-blue-600"

@@ -79,9 +79,9 @@ export default function SideBar() {
         }`}
       >
         <div className="text-2xl font-black text-blue-600 tracking-tighter flex items-center gap-2">
-          <span className="shrink-0">H.</span>
+          <span className="shrink-0">HR</span>
           {!isCollapsed && (
-            <span className="animate-in fade-in duration-500">IRE.AI</span>
+            <span className="animate-in fade-in duration-500">_RECRUITER</span>
           )}
         </div>
       </div>
