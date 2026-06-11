@@ -16,9 +16,9 @@ import {
 } from "lucide-react";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
 import { ApplicationStatus } from "@/types";
+import { useRouter } from "next/navigation";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-
 
 // Shape returned by /api/recruiter/candidates
 interface Candidate {
@@ -95,13 +95,13 @@ const STATUS_CONFIG: Record<
   INTERVIEW: {
     label: "",
     color: "",
-    bg: ""
+    bg: "",
   },
   ASSESSMENT: {
     label: "",
     color: "",
-    bg: ""
-  }
+    bg: "",
+  },
 };
 
 const FILTER_STATUSES: ApplicationStatus[] = [
@@ -126,7 +126,7 @@ export default function RecruiterCandidatesPage() {
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [jobFilter, setJobFilter] = useState<string>("ALL");
   const [jobs, setJobs] = useState<{ _id: string; title: string }[]>([]);
-
+  
   const [selected, setSelected] = useState<Candidate | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
@@ -141,8 +141,9 @@ export default function RecruiterCandidatesPage() {
   });
   const [scheduling, setScheduling] = useState(false);
   const [scheduleError, setScheduleError] = useState<string | null>(null);
-
+  
   const LIMIT = 20;
+  const router = useRouter();
 
   // Debounce
   useEffect(() => {
@@ -573,10 +574,11 @@ export default function RecruiterCandidatesPage() {
             </div>
 
             <button
-              onClick={() => (window.location.href = "./chat")}
+              onClick={() => router.push("/recruiter/chat")}
               className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-all cursor-pointer shadow-lg shadow-indigo-200 dark:shadow-none"
             >
-              <MessageSquare size={16} /> Message {selected.name?.split(" ")[0]}
+              <MessageSquare size={16} />
+              Message {selected.name?.split(" ")[0]}
             </button>
 
             {updatingId === selected._id && (

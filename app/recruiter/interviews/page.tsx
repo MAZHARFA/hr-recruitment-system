@@ -244,7 +244,7 @@ export default function RecruiterInterviewsPage() {
     }
     setSaving(true);
     try {
-      // FIX: correct plural path /api/recruiter/interviews
+      // FIX: correct plural path /api/recruiter/interview
       const res = await fetch("/api/recruiter/interview", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -600,7 +600,7 @@ export default function RecruiterInterviewsPage() {
               >
                 {saving ? (
                   <>
-                    <Loader2 size={16} className="animate-spin" /> Scheduling...
+                    <LoadingSpinner /> Scheduling...
                   </>
                 ) : (
                   <>

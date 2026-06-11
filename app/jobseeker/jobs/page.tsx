@@ -8,12 +8,12 @@ import {
   Clock,
   Send,
   X,
-  Loader2,
   AlertCircle,
   Bookmark,
   BookmarkCheck,
 } from "lucide-react";
 import { JobType } from "@/types";
+import LoadingSpinner from "@/components/UI/LoadingSpinner";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -326,7 +326,6 @@ export default function JobSeekerJobsPage() {
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <div className="flex h-[calc(100vh-10rem)] gap-6">
-
       {/* ── Left: Job List ── */}
       <div
         className={`flex flex-col ${
@@ -402,7 +401,7 @@ export default function JobSeekerJobsPage() {
         <div className="flex-1 overflow-y-auto space-y-3 pr-1">
           {isLoading && (
             <div className="flex items-center justify-center py-16">
-              <Loader2 size={28} className="animate-spin text-gray-400" />
+              <LoadingSpinner />
             </div>
           )}
           {!isLoading && error && (
@@ -416,7 +415,10 @@ export default function JobSeekerJobsPage() {
           )}
           {!isLoading && !error && jobs.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 text-gray-400">
-              <Search size={36} className="mb-3 text-gray-300 dark:text-gray-700" />
+              <Search
+                size={36}
+                className="mb-3 text-gray-300 dark:text-gray-700"
+              />
               <p className="font-medium">No jobs found</p>
               <p className="text-sm mt-1">Try adjusting your filters</p>
             </div>
@@ -457,10 +459,7 @@ export default function JobSeekerJobsPage() {
                           className="shrink-0 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 cursor-pointer"
                         >
                           {isSaving ? (
-                            <Loader2
-                              size={14}
-                              className="animate-spin text-gray-400"
-                            />
+                            <LoadingSpinner />
                           ) : job.isSaved ? (
                             <BookmarkCheck
                               size={14}
@@ -580,10 +579,7 @@ export default function JobSeekerJobsPage() {
                     className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl cursor-pointer transition-colors disabled:opacity-50"
                   >
                     {savingJobIds.has(selectedJob.id) ? (
-                      <Loader2
-                        size={18}
-                        className="animate-spin text-gray-400"
-                      />
+                      <LoadingSpinner />
                     ) : selectedJob.isSaved ? (
                       <BookmarkCheck
                         size={18}
@@ -834,16 +830,17 @@ export default function JobSeekerJobsPage() {
               </div>
 
               {/* Pre-fill hint */}
-              {applyingJob.requiredSkills?.length > 0 && skills.length === 0 && (
-                <div className="px-4 py-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl text-xs text-amber-700 dark:text-amber-300">
-                  <span className="font-semibold">Tip:</span> This role
-                  requires:{" "}
-                  {applyingJob.requiredSkills.slice(0, 5).join(", ")}
-                  {applyingJob.requiredSkills.length > 5
-                    ? ` +${applyingJob.requiredSkills.length - 5} more`
-                    : ""}
-                </div>
-              )}
+              {applyingJob.requiredSkills?.length > 0 &&
+                skills.length === 0 && (
+                  <div className="px-4 py-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl text-xs text-amber-700 dark:text-amber-300">
+                    <span className="font-semibold">Tip:</span> This role
+                    requires:{" "}
+                    {applyingJob.requiredSkills.slice(0, 5).join(", ")}
+                    {applyingJob.requiredSkills.length > 5
+                      ? ` +${applyingJob.requiredSkills.length - 5} more`
+                      : ""}
+                  </div>
+                )}
             </div>
 
             {/* Footer */}
@@ -859,11 +856,7 @@ export default function JobSeekerJobsPage() {
                 disabled={applying}
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-sm font-semibold transition-all cursor-pointer"
               >
-                {applying ? (
-                  <Loader2 size={16} className="animate-spin" />
-                ) : (
-                  <Send size={16} />
-                )}
+                {applying ? <LoadingSpinner /> : <Send size={16} />}
                 {applying ? "Submitting…" : "Submit Application"}
               </button>
             </div>

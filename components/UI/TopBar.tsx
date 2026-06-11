@@ -15,7 +15,7 @@ export default function TopBar() {
       router.push("/yz/login");
       userProfile();
     }
-  }, [userProfile, user, router]);
+  }, [userProfile]);
 
   if (isCheckingAuth && !user) {
     return (

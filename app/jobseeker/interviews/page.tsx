@@ -4,8 +4,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Calendar, Clock, Video, Phone, Users,
-  CheckCircle, XCircle, Link2, Loader2, AlertCircle, RefreshCw,
+  CheckCircle, XCircle, Link2, AlertCircle, RefreshCw,
 } from "lucide-react";
+import LoadingSpinner from "@/components/UI/LoadingSpinner";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -128,7 +129,7 @@ export default function JobSeekerInterviewsPage() {
       <div className="space-y-6">
         <PageHeader />
         <div className="flex items-center justify-center py-24">
-          <Loader2 size={30} className="animate-spin text-gray-400" />
+          <LoadingSpinner />
         </div>
       </div>
     );

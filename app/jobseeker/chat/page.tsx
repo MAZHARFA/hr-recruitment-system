@@ -1,9 +1,17 @@
 "use client";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
-  Search, Send, ArrowLeft, Loader2,
-  CheckCheck, Paperclip, Smile, Phone, Video, MoreVertical,
+  Search,
+  Send,
+  ArrowLeft,
+  CheckCheck,
+  Paperclip,
+  Smile,
+  Phone,
+  Video,
+  MoreVertical,
 } from "lucide-react";
+import LoadingSpinner from "@/components/UI/LoadingSpinner";
 
 interface Message {
   id: string;
@@ -30,15 +38,15 @@ interface Conversation {
 }
 
 export default function JobSeekerChatPage() {
-  const [convos, setConvos]           = useState<Conversation[]>([]);
-  const [selectedId, setSelectedId]   = useState<string | null>(null);
+  const [convos, setConvos] = useState<Conversation[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [loadingList, setLoadingList] = useState(true);
   const [loadingMsgs, setLoadingMsgs] = useState(false);
-  const [input, setInput]             = useState("");
-  const [sending, setSending]         = useState(false);
-  const [search, setSearch]           = useState("");
-  const [mobileView, setMobileView]   = useState<"list" | "chat">("list");
-  const messagesEndRef                = useRef<HTMLDivElement>(null);
+  const [input, setInput] = useState("");
+  const [sending, setSending] = useState(false);
+  const [search, setSearch] = useState("");
+  const [mobileView, setMobileView] = useState<"list" | "chat">("list");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const selected = convos.find((c) => c.id === selectedId) ?? null;
 
@@ -47,7 +55,7 @@ export default function JobSeekerChatPage() {
     (async () => {
       try {
         setLoadingList(true);
-        const res  = await fetch("/api/jobseeker/chats");
+        const res = await fetch("/api/jobseeker/chats");
         const data = await res.json();
         if (Array.isArray(data)) setConvos(data);
       } catch (e) {
@@ -68,17 +76,23 @@ export default function JobSeekerChatPage() {
     async (id: string) => {
       setSelectedId(id);
       setMobileView("chat");
-      setConvos((prev) => prev.map((c) => (c.id === id ? { ...c, unread: 0 } : c)));
+      setConvos((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, unread: 0 } : c))
+      );
 
-      const alreadyLoaded = convos.find((c) => c.id === id && c.messages.length > 0);
+      const alreadyLoaded = convos.find(
+        (c) => c.id === id && c.messages.length > 0
+      );
       if (alreadyLoaded) return;
 
       setLoadingMsgs(true);
       try {
-        const res  = await fetch(`/api/jobseeker/chats?conversationId=${id}`);
+        const res = await fetch(`/api/jobseeker/chats?conversationId=${id}`);
         const data = await res.json();
         setConvos((prev) =>
-          prev.map((c) => (c.id === id ? { ...c, messages: data.messages ?? [] } : c))
+          prev.map((c) =>
+            c.id === id ? { ...c, messages: data.messages ?? [] } : c
+          )
         );
       } catch (e) {
         console.error("Failed to load messages", e);
@@ -94,17 +108,20 @@ export default function JobSeekerChatPage() {
     if (!input.trim() || !selectedId || sending) return;
     setSending(true);
 
-    const text         = input.trim();
+    const text = input.trim();
     const optimisticId = `tmp-${Date.now()}`;
     const optimistic: Message = {
-      id:             optimisticId,
+      id: optimisticId,
       text,
-      senderId:       "me",
-      sender:         "me",
-      senderRole:     "JOB_SEEKER",
-      time:           new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
-      read:           false,
-      createdAt:      new Date().toISOString(),
+      senderId: "me",
+      sender: "me",
+      senderRole: "JOB_SEEKER",
+      time: new Date().toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      read: false,
+      createdAt: new Date().toISOString(),
       conversationId: selectedId,
     };
 
@@ -112,16 +129,21 @@ export default function JobSeekerChatPage() {
     setConvos((prev) =>
       prev.map((c) =>
         c.id === selectedId
-          ? { ...c, messages: [...c.messages, optimistic], lastMessage: text, time: "Just now" }
+          ? {
+              ...c,
+              messages: [...c.messages, optimistic],
+              lastMessage: text,
+              time: "Just now",
+            }
           : c
       )
     );
 
     try {
-      const res   = await fetch("/api/jobseeker/chats", {
-        method:  "POST",
+      const res = await fetch("/api/jobseeker/chats", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ conversationId: selectedId, text }),
+        body: JSON.stringify({ conversationId: selectedId, text }),
       });
       const saved = await res.json();
 
@@ -131,7 +153,9 @@ export default function JobSeekerChatPage() {
             ? {
                 ...c,
                 messages: c.messages.map((m) =>
-                  m.id === optimisticId ? { ...saved, senderId: "me", sender: "me" } : m
+                  m.id === optimisticId
+                    ? { ...saved, senderId: "me", sender: "me" }
+                    : m
                 ),
               }
             : c
@@ -142,7 +166,10 @@ export default function JobSeekerChatPage() {
       setConvos((prev) =>
         prev.map((c) =>
           c.id === selectedId
-            ? { ...c, messages: c.messages.filter((m) => m.id !== optimisticId) }
+            ? {
+                ...c,
+                messages: c.messages.filter((m) => m.id !== optimisticId),
+              }
             : c
         )
       );
@@ -167,9 +194,14 @@ export default function JobSeekerChatPage() {
         } lg:flex flex-col w-full lg:w-80 border-r border-gray-100 dark:border-gray-800 shrink-0`}
       >
         <div className="p-4 border-b border-gray-100 dark:border-gray-800">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">Messages</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
+            Messages
+          </h2>
           <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search
+              size={16}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -182,7 +214,7 @@ export default function JobSeekerChatPage() {
         <div className="flex-1 overflow-y-auto">
           {loadingList && (
             <div className="flex items-center justify-center py-16">
-              <Loader2 size={22} className="animate-spin text-gray-400" />
+              <LoadingSpinner />
             </div>
           )}
 
@@ -207,7 +239,12 @@ export default function JobSeekerChatPage() {
               >
                 <div className="relative shrink-0">
                   <div className="w-11 h-11 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">
-                    {c.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
+                    {c.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .slice(0, 2)
+                      .toUpperCase()}
                   </div>
                   {c.online && (
                     <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white dark:border-gray-900" />
@@ -218,10 +255,13 @@ export default function JobSeekerChatPage() {
                     <span className="font-semibold text-sm text-gray-900 dark:text-white truncate">
                       {c.name}
                     </span>
-                    <span className="text-xs text-gray-400 shrink-0 ml-2">{c.time}</span>
+                    <span className="text-xs text-gray-400 shrink-0 ml-2">
+                      {c.time}
+                    </span>
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 truncate mb-1">
-                    {c.role}{c.company ? ` · ${c.company}` : ""}
+                    {c.role}
+                    {c.company ? ` · ${c.company}` : ""}
                   </p>
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-gray-400 dark:text-gray-500 truncate">
@@ -256,12 +296,20 @@ export default function JobSeekerChatPage() {
                 <ArrowLeft size={18} />
               </button>
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm shrink-0">
-                {selected.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
+                {selected.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .slice(0, 2)
+                  .toUpperCase()}
               </div>
               <div className="flex-1">
-                <p className="font-bold text-gray-900 dark:text-white text-sm">{selected.name}</p>
+                <p className="font-bold text-gray-900 dark:text-white text-sm">
+                  {selected.name}
+                </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {selected.role}{selected.company ? ` · ${selected.company}` : ""}
+                  {selected.role}
+                  {selected.company ? ` · ${selected.company}` : ""}
                 </p>
               </div>
               <div className="flex items-center gap-1">
@@ -281,7 +329,7 @@ export default function JobSeekerChatPage() {
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {loadingMsgs && (
                 <div className="flex items-center justify-center py-10">
-                  <Loader2 size={22} className="animate-spin text-gray-400" />
+                  <LoadingSpinner />
                 </div>
               )}
 
@@ -295,7 +343,9 @@ export default function JobSeekerChatPage() {
                 selected.messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`flex ${msg.senderId === "me" ? "justify-end" : "justify-start"}`}
+                    className={`flex ${
+                      msg.senderId === "me" ? "justify-end" : "justify-start"
+                    }`}
                   >
                     <div
                       className={`max-w-[70%] flex flex-col gap-1 ${
@@ -320,7 +370,9 @@ export default function JobSeekerChatPage() {
                         {msg.senderId === "me" && (
                           <CheckCheck
                             size={12}
-                            className={msg.read ? "text-blue-500" : "text-gray-300"}
+                            className={
+                              msg.read ? "text-blue-500" : "text-gray-300"
+                            }
                           />
                         )}
                       </div>
@@ -356,9 +408,7 @@ export default function JobSeekerChatPage() {
                   disabled={!input.trim() || sending}
                   className="p-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white rounded-xl transition-all cursor-pointer"
                 >
-                  {sending
-                    ? <Loader2 size={16} className="animate-spin" />
-                    : <Send size={16} />}
+                  {sending ? <LoadingSpinner /> : <Send size={16} />}
                 </button>
               </div>
             </div>
@@ -370,7 +420,9 @@ export default function JobSeekerChatPage() {
                 <Send size={24} className="text-gray-300 dark:text-gray-600" />
               </div>
               <p className="font-medium">Select a conversation</p>
-              <p className="text-sm mt-1">Choose a recruiter to start chatting</p>
+              <p className="text-sm mt-1">
+                Choose a recruiter to start chatting
+              </p>
             </div>
           </div>
         )}

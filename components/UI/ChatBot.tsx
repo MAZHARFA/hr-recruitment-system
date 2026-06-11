@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, User, ZapIcon } from 'lucide-react';
 import { createHRChatSession } from '@/services/geminiService';
 
 interface Message {
@@ -108,7 +108,7 @@ const ChatBot: React.FC = () => {
           <div className="p-4 bg-indigo-600 text-white flex justify-between items-center shrink-0">
             <div className="flex items-center gap-2">
               <div className="bg-white/20 p-1.5 rounded-lg">
-                <Bot className="w-5 h-5" />
+                <ZapIcon className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="font-semibold text-sm">AI Assistant</h3>
@@ -152,7 +152,7 @@ const ChatBot: React.FC = () => {
             {isLoading && (
                <div className="flex gap-3">
                  <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
-                    <Bot className="w-4 h-4" />
+                    <ZapIcon className="w-4 h-4" />
                  </div>
                  <div className="flex flex-col items-start">
                     <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-3 rounded-2xl rounded-tl-none shadow-sm">
@@ -165,6 +165,7 @@ const ChatBot: React.FC = () => {
                     <span className="text-[10px] text-slate-400 mt-1 px-1">Typing...</span>
                  </div>
                </div>
+               
             )}
             <div ref={messagesEndRef} />
           </div>
@@ -180,7 +181,7 @@ const ChatBot: React.FC = () => {
                 value={input}
                 onChange={(e: { target: { value: any; }; }) => setInput(e.target.value)}
                 placeholder="Ask about HR policies..."
-                className="w-full pl-4 pr-12 py-2.5 bg-slate-100 dark:bg-slate-800 border-transparent focus:bg-white dark:focus:bg-slate-900 border focus:border-indigo-500 rounded-xl text-sm outline-none transition-all dark:text-white"
+                className="w-full pl-4 pr-12 py-2.5 bg-slate-100 dark:bg-slate-800 border-transparent focus:bg-white dark:focus:bg-slate-900 border focus:border-indigo-500 rounded-xl text-sm outline-none transition-all dark:text-white text-black"
               />
               <button 
                 type="submit"
