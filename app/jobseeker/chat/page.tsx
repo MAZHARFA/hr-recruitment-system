@@ -10,6 +10,7 @@ import {
   Phone,
   Video,
   MoreVertical,
+  Loader2,
 } from "lucide-react";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
 
@@ -329,7 +330,7 @@ export default function JobSeekerChatPage() {
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {loadingMsgs && (
                 <div className="flex items-center justify-center py-10">
-                  <LoadingSpinner />
+                  <Loader2 />
                 </div>
               )}
 
@@ -408,7 +409,7 @@ export default function JobSeekerChatPage() {
                   disabled={!input.trim() || sending}
                   className="p-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white rounded-xl transition-all cursor-pointer"
                 >
-                  {sending ? <LoadingSpinner /> : <Send size={16} />}
+                  {sending ? <Loader2 /> : <Send size={16} />}
                 </button>
               </div>
             </div>
