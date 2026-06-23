@@ -22,7 +22,7 @@ export const generateTokenAndSetCookie = async (
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 7 * 24 * 60 * 60,
-    path: "/",
+    path: "https://hr-recruitment-system-zeta.vercel.app/",
   });
 
   cookieStore.set("token", token, {
@@ -30,7 +30,7 @@ export const generateTokenAndSetCookie = async (
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict", // Prevents CSRF
     maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
-    path: "/",
+    path: "https://hr-recruitment-system-zeta.vercel.app/",
   });
 
   return token;
