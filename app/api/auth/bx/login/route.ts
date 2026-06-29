@@ -7,7 +7,6 @@ import { generateTokenAndSetCookie } from "@/Utils/jwt";
 export async function POST(req: Request) {
   try {
     await connectDB();
-
     const { email, password } = await req.json();
 
     if (!email || !password) {
@@ -18,7 +17,6 @@ export async function POST(req: Request) {
     }
 
     const user = await User.findOne({ email });
-
     if (!user) {
       return NextResponse.json(
         { success: false, message: "Invalid credentials" },
@@ -27,7 +25,6 @@ export async function POST(req: Request) {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-
     if (!isPasswordValid) {
       return NextResponse.json(
         { success: false, message: "Password do not match" },
@@ -37,8 +34,9 @@ export async function POST(req: Request) {
 
     user.signIn = new Date();
     await user.save();
-
-    await generateTokenAndSetCookie(user._id.toString(), "role");
+    
+    // ✅ FIX: Change "role" to user.role
+    await generateTokenAndSetCookie(user._id.toString(), user.role);
 
     return NextResponse.json(
       {

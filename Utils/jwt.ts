@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+
 export type UserRole = "RECRUITER" | "JOB_SEEKER";
+
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const generateTokenAndSetCookie = async (
@@ -18,19 +20,19 @@ export const generateTokenAndSetCookie = async (
   const cookieStore = await cookies();
 
   cookieStore.set("user_role", role, {
-    httpOnly: true, // Keep it true so it can't be tampered with via JS
+    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60,
-    path: "https://hr-recruitment-system-zeta.vercel.app/",
+    maxAge: 7 * 24 * 60 * 60, // seconds
+    path: "/",
   });
 
   cookieStore.set("token", token, {
-    httpOnly: true, // Prevents XSS
+    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict", // Prevents CSRF
-    maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
-    path: "https://hr-recruitment-system-zeta.vercel.app/",
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60, // seconds
+    path: "/",
   });
 
   return token;
