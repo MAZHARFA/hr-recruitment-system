@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     await user.save();
     
     // ✅ FIX: Change "role" to user.role
-    await generateTokenAndSetCookie(user._id.toString(), user.role);
+    await generateTokenAndSetCookie(user._id.toString(), "role");
 
     return NextResponse.json(
       {
