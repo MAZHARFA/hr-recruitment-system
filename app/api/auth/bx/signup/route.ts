@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     });
 
     await user.save();
-    await generateTokenAndSetCookie(user._id.toString(),role);
+     generateTokenAndSetCookie(user._id.toString(),role);
 
     await sendVerificationEmail(user.email, verificationToken);
 
