@@ -9,14 +9,12 @@ import { useAuthStore } from "@/Authstore/store";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-
-export default function login() {
+export default function Login() { // Capitalized component name for React conventions
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const { login, isLoading, error } = useAuthStore();
-
   const router = useRouter();
 
   const handleLogin = async (e: { preventDefault: () => void }) => {
@@ -41,17 +39,19 @@ export default function login() {
     }
 
     try {
-      // Use 'as any' if your store types aren't updated yet to stop the 'void' error
       const user = (await login(email, password)) as any;
 
-      // Now this 'truthiness' test is allowed
       if (user && user.role) {
         toast.success("Login successful!");
 
-        // Exact match for your role keys (Job Seeker has a space)
-        if (user.role === "Recruiter") {
+        /* FIX 1: Mapped exact matching strings from your backend config 
+          ("RECRUITER" and "JOB_SEEKER") instead of "Recruiter" / "Job Seeker".
+        */
+        const normalizedRole = user.role.toUpperCase().replace(" ", "_");
+
+        if (normalizedRole === "RECRUITER") {
           router.push("/recruiter/dashboard");
-        } else if (user.role === "Job Seeker") {
+        } else if (normalizedRole === "JOB_SEEKER") {
           router.push("/jobseeker/dashboard");
         } else {
           router.push("/"); // General fallback
@@ -62,6 +62,7 @@ export default function login() {
       setPassword("");
     } catch (error) {
       console.error("Login redirect error:", error);
+      toast.error("Authentication failed. Please check your credentials.");
     }
   };
 
@@ -148,7 +149,6 @@ export default function login() {
               Sign up
             </Link>
           </p>
-         
         </div>
       </motion.div>
     </div>
