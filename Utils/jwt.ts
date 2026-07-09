@@ -17,22 +17,20 @@ export const generateTokenAndSetCookie = async (
   });
 
   const cookieStore = await cookies();
+  const isProduction = process.env.NODE_ENV === "production";
 
-  cookieStore.set("user_role", role, {
+  const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax", // "strict" can also block cookies right after redirects (e.g. after login POST -> redirect)
-    maxAge: 7 * 24 * 60 * 60,
-    path: "/", // must be a path, NOT a full URL
-  });
-
-  cookieStore.set("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 7 * 24 * 60 * 60,
+    secure: isProduction, 
+    maxAge: 7 * 24 * 60 * 60, // 7 days
     path: "/",
-  });
+    sameSite: (isProduction ? "none" : "lax") as "none" | "lax",
+    // If you run frontend and backend under shared root subdomains, uncomment below:
+    domain: isProduction ? "https://hr-recruitment-system-eight.vercel.app/" : undefined,
+  };
+
+  cookieStore.set("user_role", role.toUpperCase(), cookieOptions);
+  cookieStore.set("token", token, cookieOptions);
 
   return token;
 };
