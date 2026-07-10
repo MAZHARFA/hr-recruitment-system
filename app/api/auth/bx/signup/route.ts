@@ -1,30 +1,27 @@
+export const dynamic = "force-dynamic"; // Ensures cookies are sent safely on Vercel
+
 import { connectDB } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/modal/user.modal";
 import bcrypt from "bcryptjs";
 import { sendVerificationEmail } from "@/Emails/service";
-import {generateTokenAndSetCookie} from "@/Utils/jwt";
+import { generateTokenAndSetCookie } from "@/Utils/jwt";
 
 interface SignupBody {
   Name: string;
   email: string;
   password: string;
-  imageUrl: File;
-  role:string;
-  verificationToken: number;
-  verificationTokenExpiresAt: number;
+  imageUrl: string;
+  role: string;
 }
 
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
     const body: SignupBody = await req.json();
+    const { Name, email, password, imageUrl, role } = body;
 
-    const { Name, email, password, imageUrl,role } = body;
-
-   
-
-    if (!Name || !email || !password) {
+    if (!Name || !email || !password || !role) {
       return NextResponse.json(
         { success: false, message: "All fields are required" },
         { status: 400 }
@@ -32,7 +29,6 @@ export async function POST(req: NextRequest) {
     }
 
     const existingUser = await User.findOne({ email });
-
     if (existingUser) {
       return NextResponse.json(
         { success: false, message: "User already exists" },
@@ -41,10 +37,7 @@ export async function POST(req: NextRequest) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const verificationToken = Math.floor(
-      100000 + Math.random() * 900000
-    ).toString();
+    const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
     const user = new User({
       Name: Name,
@@ -57,7 +50,9 @@ export async function POST(req: NextRequest) {
     });
 
     await user.save();
-     generateTokenAndSetCookie(user._id.toString(),role);
+    
+    // Await structural execution so headers attach correctly
+    await generateTokenAndSetCookie(user._id.toString(), role);
 
     await sendVerificationEmail(user.email, verificationToken);
 
@@ -65,12 +60,17 @@ export async function POST(req: NextRequest) {
       {
         success: true,
         message: "User created successfully",
+        user: {
+          id: user._id,
+          name: user.Name,
+          email: user.email,
+          role: user.role,
+        },
       },
       { status: 201 }
     );
   } catch (error: unknown) {
     const err = error as Error;
-
     return NextResponse.json(
       { success: false, message: err.message },
       { status: 500 }

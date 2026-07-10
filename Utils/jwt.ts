@@ -20,15 +20,12 @@ export const generateTokenAndSetCookie = async (
   const isProduction = process.env.NODE_ENV === "production";
 
   const cookieOptions = {
-    // FIX 1: Set httpOnly to false so client-side JavaScript can access it for your dashboard
-    httpOnly: false, 
-    secure: isProduction, 
+    httpOnly: false,      // Allowed so client-side JavaScript can see it for the dashboard
+    secure: isProduction, // Enabled on Vercel (HTTPS required)
     maxAge: 7 * 24 * 60 * 60, // 7 days
     path: "/",
-    // FIX 2: Use "lax" for standard Next.js setups so the browser doesn't block it
     sameSite: "lax" as const,
-    // FIX 3: Removed "https://" and "/" from the domain name
-    domain: isProduction ? "hr-recruitment-system-eight.vercel.app" : undefined,
+    // Note: 'domain' is omitted so the browser automatically handles Vercel's multi-subdomain structure.
   };
 
   cookieStore.set("user_role", role.toUpperCase(), cookieOptions);

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"; 
+
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
@@ -35,13 +37,16 @@ export async function POST(req: Request) {
     user.signIn = new Date();
     await user.save();
     
-    // ✅ FIX: Change "role" to user.role
-    await generateTokenAndSetCookie(user._id.toString(), "role");
+    // Pass the actual database user role dynamically
+    await generateTokenAndSetCookie(user._id.toString(), user.role);
 
     return NextResponse.json(
       {
         success: true,
         user: {
+          id: user._id,
+          name: user.Name,
+          email: user.email,
           role: user.role,
         },
       },
