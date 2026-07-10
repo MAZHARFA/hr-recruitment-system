@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-export type UserRole = "RECRUITER" | "JOB_SEEKER";
+export type UserRole = "Recruiter" | "Job seeker";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const generateTokenAndSetCookie = async (
@@ -26,7 +26,7 @@ export const generateTokenAndSetCookie = async (
     path: "/",
     sameSite: (isProduction ? "none" : "lax") as "none" | "lax",
     // If you run frontend and backend under shared root subdomains, uncomment below:
-    domain: isProduction ? "https://hr-recruitment-system-eight.vercel.app/" : undefined,
+    domain: isProduction ? "hr-recruitment-system-eight.vercel.app/" : undefined,
   };
 
   cookieStore.set("user_role", role.toUpperCase(), cookieOptions);
@@ -34,3 +34,5 @@ export const generateTokenAndSetCookie = async (
 
   return token;
 };
+
+
